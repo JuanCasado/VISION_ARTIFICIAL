@@ -163,11 +163,13 @@ D=sqrt((p-floor((N/2)+1)).^2+(q-floor((M/2)+1)).^2)<=(0.2*M);%Radio filtrado: 0.
 % utilizando diferentes frecuencias de corte relacionadas con la anchura de la 
 % campana gausiana (mostrada en negrita en el ejemplo con un valor de 0.2*M):*
 
-load trees; im=ind2gray(X,map);figure,imshow(im)
+load trees; im=ind2gray(X,map);
+figure,imshow(im)
 [filas_im,columnas_im]=size(im);
 N=(2*columnas_im)-1;
 M=(2*filas_im)-1;
-pp=1:N; qq=1:M;[p,q]=meshgrid(pp,qq);
+pp=1:N; qq=1:M;
+[p,q]=meshgrid(pp,qq);
 D=sqrt((p-floor((N/2)+1)).^2+(q-floor((M/2)+1)).^2); %Distancia de cada pixel al central de frecuencia (0,0)
 k=1/(2*((0.2*M)^2)); %Parametro relacionado con la anchura de la campana de gauss
 H=exp(-k.*(D.^2)); %Implementa la funci�n gaussiana con relacion al pixel central de la imagen
@@ -176,7 +178,8 @@ NIM=fft2(im,M,N).*fftshift(H);
 figure,imagesc(log(1+abs(fftshift(fft2(im,M,N))))),colorbar
 figure,imagesc(log(1+abs(fftshift(NIM)))),colorbar
 nim=real(ifft2(NIM));
-nim=nim(1:filas_im,1:1:columnas_im);figure,imshow(nim)
+nim=nim(1:filas_im,1:1:columnas_im);
+figure,imshow(nim)
 
 %% Filtro paso alto ideal
 % En las frecuencias (p,q) situadas en un radio alrededor de la frecuencia m�s 
