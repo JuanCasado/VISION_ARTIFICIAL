@@ -1,4 +1,5 @@
 PERSON_TARKER/env/
 *.weights
 *.caffemodel
+*.pb
 
