@@ -33,7 +33,7 @@ def capture_image ():
 
 def init(image):
   #Elements to create
-  yolo = FastYolo((height, width))
+  yolo = FastYolo((height, width), 4)
   movement = MovementManager()
   faces = Faces()
   m = MarkovFilter(width)
@@ -79,8 +79,6 @@ while(True):
   start = time.time()
   frame = capture_image()
 
-
-  
   #Get Person boxes
   boxes, in_distances, confidences, classids = yolo.infer_image(frame)
   for box, in_distance in zip(boxes, in_distances):

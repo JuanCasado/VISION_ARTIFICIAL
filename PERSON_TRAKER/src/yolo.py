@@ -8,8 +8,8 @@ class Yolo:
 
   def __init__(self,
       image_size,
-      min_confidence = 0.5,
-      box_threshold = 0.3,
+      min_confidence = 0.4,
+      nms_threshold = 0.3,
       tiny = True,
       persons_only = True):
     if tiny:
@@ -22,7 +22,7 @@ class Yolo:
     self.height = image_size[0]
     self.width = image_size[1]
     self.min_confidence = min_confidence
-    self.box_threshold = box_threshold
+    self.nms_threshold = nms_threshold
     self.persons_only = persons_only
     self.labels = open(labels_src).read().strip().split('\n')
     self.color_matcher = None
@@ -31,7 +31,7 @@ class Yolo:
     self.layer_names = [layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
 
   def draw (self, image, boxes, color_distances, confidences, classids):
-    for box, color_distance, class_id, confidence in zip(boxes,color_distances, classids, confidences):
+    for box, color_distance, class_id, confidence in zip(boxes, color_distances, classids, confidences):
       x, y = abs(box[0]), abs(box[1])
       w, h = abs(box[2]), abs(box[3])
       if color_distance:
@@ -41,7 +41,8 @@ class Yolo:
       cv2.rectangle(image, (x, y), (x+w, y+h), color, 3)
       text = "{}: {:4f}".format(self.labels[class_id], confidence)
       cv2.putText(image, text, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, self.min_confidence, color, 2)
-      image = self.color_matcher.draw(image, box)
+      if self.color_matcher:
+        image = self.color_matcher.draw(image, box)
     return image
 
   def set_color_matcher (self, color_matcher):
@@ -69,7 +70,22 @@ class Yolo:
             classids.append(class_id)
             if self.color_matcher:
               color_distances.append(self.color_matcher.in_distance(image, new_box))
-    return boxes, color_distances , confidences, classids
+            else:
+              color_distances.append(0)
+    indices = cv2.dnn.NMSBoxes(boxes, confidences, self.min_confidence, self.nms_threshold)
+    final_boxes = []
+    final_confidences = []
+    final_classids = []
+    final_color_distances = []
+    for i in indices:
+      final_boxes.append(boxes[i[0]])
+      final_confidences.append(confidences[i[0]])
+      final_classids.append(classids[i[0]])
+      if self.color_matcher:
+        final_color_distances.append(color_distances[i[0]])
+      else:
+        final_color_distances.append(0)
+    return final_boxes, final_color_distances , final_confidences, final_classids
 
   def infer_image(self, image):
     blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416), swapRB=True, crop=False)

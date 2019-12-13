@@ -41,13 +41,13 @@ title('Image of a Cluttered Scene');
 
 % Detect feature points in both images.
 
-%Object1Points = detectBRISKFeatures(Object1Image);scenePoints = detectBRISKFeatures(sceneImage);
+Object1Points = detectBRISKFeatures(Object1Image);scenePoints = detectBRISKFeatures(sceneImage);
 %Object1Points = detectFASTFeatures(Object1Image);scenePoints = detectFASTFeatures(sceneImage);
 %Object1Points = detectHarrisFeatures(Object1Image);scenePoints = detectHarrisFeatures(sceneImage);
 %Object1Points = detectMinEigenFeatures(Object1Image);scenePoints = detectMinEigenFeatures(sceneImage);
 %Object1Points = detectMSERFeatures(Object1Image);scenePoints = detectMSERFeatures(sceneImage);
 %Object1Points = detectORBFeatures(Object1Image);scenePoints = detectORBFeatures(sceneImage);
-Object1Points = detectSURFFeatures(Object1Image);scenePoints = detectSURFFeatures(sceneImage);
+%Object1Points = detectSURFFeatures(Object1Image);scenePoints = detectSURFFeatures(sceneImage);
 %Object1Points = detectKAZEFeatures(Object1Image);scenePoints = detectKAZEFeatures(sceneImage);
 
 
@@ -94,7 +94,7 @@ title('Putatively Matched Points (Including Outliers)');
 % puntos coincidentes, a la vez que elimina los valores outliers. Esta transformaci�n 
 % nos permite localizar el objeto en la escena.
 
-[tform, inlierObject1Points, inlierScenePoints] = estimateGeometricTransform(matchedObject1Points, matchedScenePoints, 'affine');
+[tform, inlierObject1Points, inlierScenePoints] = estimateGeometricTransform(matchedObject1Points, matchedScenePoints, 'affine', 'Confidence', 99, 'MaxDistance', 2);
 
 figure;
 showMatchedFeatures(Object1Image, sceneImage, inlierObject1Points, inlierScenePoints, 'montage');

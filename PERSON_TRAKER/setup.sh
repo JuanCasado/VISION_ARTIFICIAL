@@ -5,6 +5,11 @@ pip3 install numpy
 pip3 install opencv-python
 pip3 install Pillow
 pip3 install matplotlib
+pip install scipy
+pip install filterpy
+pip install numba
+pip install scikit-image
+pip install scikit-learn
 
 mkdir yolov3-coco
 wget https://pjreddie.com/media/files/yolov3-tiny.weights

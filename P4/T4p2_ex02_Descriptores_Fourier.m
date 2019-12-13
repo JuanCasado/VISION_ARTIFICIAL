@@ -46,7 +46,7 @@ hold off
 %% 
 % Step 5)  Fourier descriptors 
 
-descriptor_percentage = 0.03;
+descriptor_percentage = 0.02;
 
 imshow(label2rgb(L, @jet, [1.0 1.0 1.0]))
 hold on

@@ -1,0 +1,197 @@
+%1.Cargue la imagen 'trees.tif' e indique el formato de la misma (RGB o mapa de colores
+%indexado)
+clear;
+info = imfinfo('trees.tif');
+info.ColorType
+
+
+
+%2.Visualice la imagen que acabamos de leer.
+load trees
+imshow (X, map)
+
+
+
+%3.Convierta la imagen anterior a una imagen en escala de grises (conteniendo sólo la información de la luminancia)
+%y almacénela en un array llamado i. Indique el rango de valores en los que se cuanti
+% fica la luminancia (negro?blanco) de la imagen resultante. 
+I=ind2gray(X, map);
+imshow(I)
+M =max(I(:))
+m =min(I(:))
+
+
+%4.Averigüe las dimensiones de nuestra imagen i (filas x columnas
+size(I)
+
+%5.Muestre el histograma de la imagen en escala de grises. 
+imhist(I)
+
+%6.Modifique el brillo (sumando una constante) y el contraste (multiplicando por una constante) 
+% de la imagen en escala de grises y visualice las imágenes resultantes y sus histogramas.
+imshow(I+100)
+imshow(I*10)
+
+%7.Realice una binarización de la imagen i con un umbral cuyo valor sea aproximadamente la mitad de su rango de grises y visualice el
+% resultado
+round(I)
+
+%8.Obtenga el negativo de la imagen en escala de grises obtenida en el punto anterior. 
+imshow(1-I)
+
+%9.Obtenga tres versiones ruidosas de la imagen i:  
+%(a) con ruido de distribución uniforme ‘speckle’,
+S =imnoise(I,'speckle');
+imshow(S)
+%(b) con ruido de tipo ‘sal y pimienta’ de densidad de ruido 5%, 
+SP=imnoise(I,'salt & pepper',0.05);
+imshow(SP)
+%(c) con ruido de tipo gaussiano de media cero y varianza 0.01. 
+G=imnoise(I,'gaussian',0.01);
+% imshow(G)
+
+%10.Partiendo de la imagen contaminada con ruido gaussiano anterior, fíltrela utilizando la media del entorno de vecindad, 
+% primero con un entorno de vecindad de 3x3 
+M3=medfilt2(G,[3 3]);
+imshow(M3)
+%y luego con uno de 5x5, comparando los resultados obtenidos.
+M5=medfilt2(G,[5 5]);
+imshow(M5)
+
+%11.Lea la imagen venas.tif y rótela un ángulo de 50 grados (por ejemplo), utilizando los métodos de interpolación nearest 
+V = imread('venas.tif');
+VR=imrotate(V,50,'nearest');
+%y bicubic. Aumente las imágenes lo suficiente para ver las diferencias entre ambos
+%resultados.
+imshow(VR)
+VR2=imrotate(V,50,'bicubic');
+imshow(VR2)
+
+%12.A partir de la imagen original blood1.tif, obtenga 16 imágenes en diferentes ensayos con 
+% ruido gaussiano de media cero y varianza 0.05. Guárdelas en ficheros con sus respectivos nombres (ruidosa1.bmp, …, ruidosa16.bmp).
+B=imread('C:\Users\santi\Downloads\imagenes\blood1.tif');
+%for i=1:16
+%%G=imnoise(B,'gaussian',0,0.05);
+%imshow(G)
+%str=['ruidosa1','ruidosa2','ruidosa3','ruidosa4','ruidosa5','ruidosa6','ruidosa7','ruidosa8','ruidosa9','ruidosa10','ruidosa11','ruidosa12','ruidosa13','ruidosa14','ruidosa15','ruidosa16'];
+%%imwrite(G,'ruidosa1.bmp','bmp')
+%end
+G1=imnoise(B,'gaussian',0,0.05);
+imwrite(G1,'ruidosa1.bmp','bmp');
+G2=imnoise(B,'gaussian',0,0.05);
+imwrite(G2,'ruidosa2.bmp','bmp');
+G3=imnoise(B,'gaussian',0,0.05);
+imwrite(G3,'ruidosa3.bmp','bmp');
+G4=imnoise(B,'gaussian',0,0.05);
+imwrite(G4,'ruidosa4.bmp','bmp');
+G5=imnoise(B,'gaussian',0,0.05);
+imwrite(G5,'ruidosa5.bmp','bmp');
+G6=imnoise(B,'gaussian',0,0.05);
+imwrite(G6,'ruidosa6.bmp','bmp');
+G7=imnoise(B,'gaussian',0,0.05);
+imwrite(G7,'ruidosa7.bmp','bmp');
+G8=imnoise(B,'gaussian',0,0.05);
+imwrite(G8,'ruidosa8.bmp','bmp');
+G9=imnoise(B,'gaussian',0,0.05);
+imwrite(G9,'ruidosa9.bmp','bmp');
+G10=imnoise(B,'gaussian',0,0.05);
+imwrite(G10,'ruidosa10.bmp','bmp');
+G11=imnoise(B,'gaussian',0,0.05);
+imwrite(G11,'ruidosa11.bmp','bmp');
+G12=imnoise(B,'gaussian',0,0.05);
+imwrite(G12,'ruidosa12.bmp','bmp');
+G13=imnoise(B,'gaussian',0,0.05);
+imwrite(G13,'ruidosa13.bmp','bmp');
+G14=imnoise(B,'gaussian',0,0.05);
+imwrite(G14,'ruidosa14.bmp','bmp');
+G15=imnoise(B,'gaussian',0,0.05);
+imwrite(G15,'ruidosa15.bmp','bmp');
+G16=imnoise(B,'gaussian',0,0.05);
+imwrite(G16,'ruidosa16.bmp','bmp');
+%aqui los blucles for no funcionan, no es mi problema
+
+%13. Realice pruebas de filtrado de ruido usando la técnica de promediado de imágenes sobre las imágenes creadas en el punto anterior. 
+% Para ello, promedie en primer lugar con 4 imágenes ruidosas
+r1=imread('ruidosa1.bmp');
+r2=imread('ruidosa2.bmp');
+r3=imread('ruidosa3.bmp');
+r4=imread('ruidosa4.bmp');
+p4= (r1+r2+r3+r4)/4;
+imshow(p4);
+%f2_1=filter2('ruidosa1.bmp','ruidosa2.bmp','full')
+%subplot(1,2,1),imshow(f2_1)
+%f2_2=filter2('ruidosa3.bmp','ruidosa4.bmp','full')
+
+% , luego con 8 
+r5=imread('ruidosa5.bmp');
+r6=imread('ruidosa6.bmp');
+r7=imread('ruidosa7.bmp');
+r8=imread('ruidosa8.bmp');
+p8=(r1+r2+r3+r4+r5+r6+r7+r8)/8;
+imshow(p8)
+% y, finalmente, con las 16. Compare visualmente los resultados.
+r9=imread('ruidosa9.bmp');
+r10=imread('ruidosa10.bmp');
+r11=imread('ruidosa11.bmp');
+r12=imread('ruidosa12.bmp');
+r13=imread('ruidosa13.bmp');
+r14=imread('ruidosa14.bmp');
+r15=imread('ruidosa15.bmp');
+r16=imread('ruidosa16.bmp');
+p16=(r1+r2+r3+r4+r5+r6+r7+r8+r7+r8+r9+r10+r11+r12+r13+r14+r15+r16)/16;
+imshow(p16)
+
+%14. Utilizando la imagen P2gris.jpg, compuesta únicamente por un fondo grisáceo de luminancia intermedia, complete los siguientes pasos: 
+%cargue la imagen, conviértala a escala de grises y muestre su histograma,
+P2g=imread('C:\Users\santi\Downloads\imagenes\blood1.tif');%no está la imagen subida
+P2gris=ind2gray(P2g, map);
+imhist(P2gris);
+%contamine con ruido speckle la imagen de grises y almacene el resultado en otro fichero de imagen, 
+P2s=imnoise(P2gris,'speckle');
+imwrite(P2s,'p2speckle.bmp','bmp');
+%observe el histograma de la imagen ruidosa y confirme que el ruido tiene una distribución uniforme
+imhist(P2s)
+%consulte la ayuda del comando imnoise, para ver cómo se puede cambiar la varianza del ruido, 
+% contamine la imagen original con ruido speckle con diferentes varianzas,
+% y observe qué ocurre con los histogramas de las distintas imágenes ruidosas generada
+contaminada1=imnoise(P2g,'speckle',0.05);
+imshow(contaminada1)
+imhist(contaminada1)
+contaminada2=imnoise(P2g,'speckle',0.15);
+imshow(contaminada2)
+imhist(contaminada2)
+contaminada3=imnoise(P2g,'speckle',0.50);
+imshow(contaminada3)
+imhist(contaminada3)
+
+%15. Busque una imagen oscura y poco contrastada, o créela a partir de una fotografía (multiplicando por 0.1 o 0.2 sus niveles de gris). 
+%A continuación, visualice dicha imagen y su histograma. 
+
+% Finalmente, obtenga el logaritmo de dicha imagen, 
+
+% calculando previamente el valor óptimo de K, para asegurar que el nivel máximo 
+% de gris a la salida sea el máximo posible. Visualice la imagen resultante y observe la mejora obtenida. 
+
+% Pruebe utilizando valores de K diferentes al calculado. 
+
+%16. Cargue la imagen bazo.bmp y muestre su histograma. Compruebe que se trata de una imagen poco contrastada. 
+bazo=imread('C:\Users\santi\Downloads\imagenes\bazo.bmp');
+% Convierta a escala de grises la imagen y luego ecualice su histograma uniformemente.
+bazog=ind2gray(bazo, map);
+he=histeq(bazog);
+subplot(1,2,1)
+imshow(he)
+subplot(1,2,2)
+imhist(he,64)
+
+%17.Disminuya el brillo de la imagen bazo.bmp hasta que el nivel de gris más bajo sea 0 
+% y sobre esa imagen realice una ecualización gamma. 
+bazo=imread('C:\Users\santi\Downloads\imagenes\bazo.bmp')
+imshow(bazo)
+while (min(bazo)>0)
+    bazo=bazo-1;    
+end
+imshow(bazo)
+a=lin2rgb(bazo);%no tengo ni idea
+imshow(a)
+% Pruebe con distintos valores de gamma y analice el efecto de cada uno sobre la imagen de salida. 
